@@ -15,6 +15,8 @@ from ldm.dream.pngwriter import PngWriter, PromptFormatter
 from ldm.dream.server import DreamServer, ThreadingDreamServer
 from ldm.dream.image_util import make_grid
 
+os.environ['KMP_DUPLICATE_LIB_OK']='True' # Fix complaints about OMP libiomp5md.dll being linked twice -PHE
+
 def main():
     """Initialize command-line parsers and the diffusion model"""
     arg_parser = create_argv_parser()

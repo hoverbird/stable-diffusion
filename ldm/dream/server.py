@@ -6,6 +6,8 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from ldm.dream.pngwriter import PngWriter
 from threading import Event
 
+from ldm.dream.artQuery import ArtQuery, schema
+
 class CanceledException(Exception):
     pass
 
@@ -36,6 +38,22 @@ class DreamServer(BaseHTTPRequestHandler):
             self.send_header("Content-type", "application/json")
             self.end_headers()
             self.wfile.write(bytes('{}', 'utf8'))
+        # elif self.path == "/api":
+        #     content_length = int(self.headers['Content-Length'])
+        #     hoobs = self.headers['hooba']
+        #     print(f">> Request hit API path: {content_length}")
+        #     print(f">> Got stank?: {hoobs}")
+
+        #     query = '''
+        #     query SayHello {
+        #         hello
+        #         }
+        #     '''
+        #     result = schema.execute(query)
+        #     self.send_response(200)
+        #     self.send_header("Content-type", "application/json")
+        #     self.end_headers()
+        #     self.wfile.write(json.dumps(result.data), "utf-8")
         else:
             path = "." + self.path
             cwd = os.path.realpath(os.getcwd())
@@ -53,16 +71,39 @@ class DreamServer(BaseHTTPRequestHandler):
             else:
                 self.send_response(404)
 
+# post method
     def do_POST(self):
         self.send_response(200)
         self.send_header("Content-type", "application/json")
         self.end_headers()
 
+        content_length = int(self.headers['Content-Length'])
+        post_data = json.loads(self.rfile.read(content_length))
+        
+        if self.path == "/api":
+            content_length = int(self.headers['Content-Length'])
+            hoobs = self.headers['hooba']
+            print(f">> Request hit API path: {content_length}")
+            print(f">> Got stank?: {hoobs}")
+
+            # query = '''
+            # query SayHello {
+            #     hello
+            #     }
+            # '''
+            query = post_data['query']
+            result = schema.execute(query)
+            responseString = json.dumps(
+                result.data
+            ) + '\n'
+            print("Responsive!\n" + responseString)
+            self.wfile.write(bytes(responseString, "utf-8"))
+            # self.wfile.write(json.dumps(result.data), "utf-8")
+            return
+
         # unfortunately this import can't be at the top level, since that would cause a circular import
         from ldm.gfpgan.gfpgan_tools import gfpgan_model_exists
 
-        content_length = int(self.headers['Content-Length'])
-        post_data = json.loads(self.rfile.read(content_length))
         prompt = post_data['prompt']
         initimg = post_data['initimg']
         strength = float(post_data['strength'])
