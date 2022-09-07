@@ -81,16 +81,6 @@ class DreamServer(BaseHTTPRequestHandler):
         post_data = json.loads(self.rfile.read(content_length))
         
         if self.path == "/api":
-            content_length = int(self.headers['Content-Length'])
-            # hoobs = self.headers['hooba']
-            # print(f">> Request hit API path: {content_length}")
-            # print(f">> Got stank?: {hoobs}")
-
-            # query = '''
-            # query SayHello {
-            #     hello
-            #     }
-            # '''
             query = post_data['query']
             vars = post_data['variables']
             print("Post query!\n" + query)
@@ -99,34 +89,38 @@ class DreamServer(BaseHTTPRequestHandler):
             result = schema.execute(query, vars)
             print("Schema executre result:\n")
             print(result)
-
             responseString = json.dumps(
                 result.data
             ) + '\n'
             print("Final json dump result:\n" + responseString)
             self.wfile.write(bytes(responseString, "utf-8"))
             # self.wfile.write(json.dumps(result.data), "utf-8")
-            return
-
+            data = result.data
+        else:
+            data = post_data
         # unfortunately this import can't be at the top level, since that would cause a circular import
         from ldm.gfpgan.gfpgan_tools import gfpgan_model_exists
 
-        prompt = post_data['prompt']
-        initimg = post_data['initimg']
-        strength = float(post_data['strength'])
-        iterations = int(post_data['iterations'])
-        steps = int(post_data['steps'])
-        width = int(post_data['width'])
-        height = int(post_data['height'])
-        fit    = 'fit' in post_data
-        cfgscale = float(post_data['cfgscale'])
-        sampler_name  = post_data['sampler']
-        gfpgan_strength = float(post_data['gfpgan_strength']) if gfpgan_model_exists else 0
-        upscale_level    = post_data['upscale_level']
-        upscale_strength = post_data['upscale_strength']
+        prompt = data.get('hello', "A beautiful hellscape.")
+
+        strength = float(data.get('strength', 0.75))
+        iterations = int(data.get('iterations', 1))
+        steps = int(data.get('steps', 50))
+        initimg = data.get('initimg')
+
+        width = int(data.get('width', 512))
+        height = int(data.get('height', 512))
+        fit    = data.get('fit', True)
+        cfgscale = float(data.get('cfgscale', 7.5))
+        sampler_name  = data.get('sampler', "k_lms")
+        gfpgan_strength = float(data.get('gfpgan_strength', 0.8)) if gfpgan_model_exists else 0
+        upscale_level    = data.get('upscale_level', "")
+        upscale_strength = data.get('upscale_strength', "0.75") 
         upscale = [int(upscale_level),float(upscale_strength)] if upscale_level != '' else None
-        progress_images = 'progress_images' in post_data
-        seed = self.model.seed if int(post_data['seed']) == -1 else int(post_data['seed'])
+        progress_images = post_data.get('progress_images' or False)
+        rawSeed = data.get('seed', -1)
+
+        seed = self.model.seed if int(rawSeed) == -1 else int(rawSeed)
 
         self.canceled.clear()
         print(f">> Request to generate with prompt: {prompt}")

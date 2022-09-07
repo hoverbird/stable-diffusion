@@ -7,6 +7,6 @@ class ArtQuery(ObjectType):
         print("**********************Hello Resolver")
         print(root)
         print(prompt)
-        return 'World: ' + prompt
+        return prompt
 
 schema = Schema(ArtQuery)
