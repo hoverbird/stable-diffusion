@@ -1,9 +1,12 @@
-import graphene
+from graphene import ObjectType, Field, ID, Schema, String
 
-class ArtQuery(graphene.ObjectType):
-    hello = graphene.String(description='A typical hello world')
+class ArtQuery(ObjectType):
+    hello = String(prompt=String(default_value="A beautiful landscape."))
 
-    def resolve_hello(self, info):
-        return 'World'
+    def resolve_hello(root, info, prompt):
+        print("**********************Hello Resolver")
+        print(root)
+        print(prompt)
+        return 'World: ' + prompt
 
-schema = graphene.Schema(query=ArtQuery)
+schema = Schema(ArtQuery)

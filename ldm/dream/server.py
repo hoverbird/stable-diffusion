@@ -82,9 +82,9 @@ class DreamServer(BaseHTTPRequestHandler):
         
         if self.path == "/api":
             content_length = int(self.headers['Content-Length'])
-            hoobs = self.headers['hooba']
-            print(f">> Request hit API path: {content_length}")
-            print(f">> Got stank?: {hoobs}")
+            # hoobs = self.headers['hooba']
+            # print(f">> Request hit API path: {content_length}")
+            # print(f">> Got stank?: {hoobs}")
 
             # query = '''
             # query SayHello {
@@ -92,11 +92,18 @@ class DreamServer(BaseHTTPRequestHandler):
             #     }
             # '''
             query = post_data['query']
-            result = schema.execute(query)
+            vars = post_data['variables']
+            print("Post query!\n" + query)
+            print(vars)
+            
+            result = schema.execute(query, vars)
+            print("Schema executre result:\n")
+            print(result)
+
             responseString = json.dumps(
                 result.data
             ) + '\n'
-            print("Responsive!\n" + responseString)
+            print("Final json dump result:\n" + responseString)
             self.wfile.write(bytes(responseString, "utf-8"))
             # self.wfile.write(json.dumps(result.data), "utf-8")
             return
