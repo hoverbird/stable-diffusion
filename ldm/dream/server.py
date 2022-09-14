@@ -16,6 +16,7 @@ class DreamServer(BaseHTTPRequestHandler):
     canceled = Event()
 
     def do_GET(self):
+        print("hit the GETTTTTTT endpoint")
         if self.path == "/":
             self.send_response(200)
             self.send_header("Content-type", "text/html")
@@ -101,6 +102,8 @@ class DreamServer(BaseHTTPRequestHandler):
         # unfortunately this import can't be at the top level, since that would cause a circular import
         from ldm.gfpgan.gfpgan_tools import gfpgan_model_exists
 
+        # if data == None:
+        #     raise "Failed to get prompt"
         prompt = data.get('hello', "A beautiful hellscape.")
 
         strength = float(data.get('strength', 0.75))
