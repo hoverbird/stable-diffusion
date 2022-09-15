@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
+from django.conf import settings
 
 import uuid
 
@@ -9,17 +10,21 @@ class PaintingMutation(models.Model):
     request_date = models.DateTimeField('date published')
 
     def __str__(self):
-        return self.name
+        return self.prompt
 
 class Painting(models.Model):
     prompt = models.TextField
     name = models.CharField(max_length=280)
     created_at = models.DateTimeField('date published')
-    image_url = models.URLField
+    image_url = models.URLField(max_length=1000)
     mutation = models.ForeignKey(PaintingMutation, on_delete=models.CASCADE)
     artist_id = models.CharField(max_length=2)
-    # player = models.ForeignKey(Player)
-    # user = models.ForeignKey(User)
+    
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        default=1,
+    )
 
     def __str__(self):
         return self.name
