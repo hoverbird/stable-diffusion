@@ -1,3 +1,8 @@
+Updating Dependencies / Setting up new PEW Env:
+--------------------
+`pew new --python 3.10 -r requirements.txt ldm8`
+
+
 Starting the Server
 ---------------------
 `cd stable-diffusion\ldm\bitterServer`

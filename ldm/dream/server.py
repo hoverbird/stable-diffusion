@@ -7,7 +7,6 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from ldm.dream.pngwriter import PngWriter, PromptFormatter
 from threading import Event
 
-# from ldm.dream.artQuery import ArtQuery, schema
 def build_opt(post_data, seed, gfpgan_model_exists):
     opt = argparse.Namespace()
     setattr(opt, 'prompt', post_data['prompt'])
