@@ -12,7 +12,7 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AddField(
             model_name='painting',
-            name='image_url',
+            name='inspiration_image_url',
             field=models.URLField(default='', max_length=1000),
             preserve_default=False,
         ),

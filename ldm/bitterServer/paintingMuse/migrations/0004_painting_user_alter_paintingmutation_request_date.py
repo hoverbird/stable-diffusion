@@ -18,9 +18,9 @@ class Migration(migrations.Migration):
             name='user',
             field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
         ),
-        migrations.AlterField(
-            model_name='paintingmutation',
-            name='request_date',
-            field=models.DateTimeField(verbose_name='date published'),
-        ),
+        # migrations.AlterField(
+        #     model_name='paintingmutation',
+        #     name='request_date',
+        #     field=models.DateTimeField(verbose_name='date published'),
+        # ),
     ]

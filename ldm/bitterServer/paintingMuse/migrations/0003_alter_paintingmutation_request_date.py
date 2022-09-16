@@ -14,9 +14,9 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AlterField(
-            model_name='paintingmutation',
-            name='request_date',
-            field=models.DateTimeField(default=datetime.now(pytz.utc), verbose_name='date published'),
-        ),
+        # migrations.AlterField(
+        #     model_name='paintingmutation',
+        #     name='request_date',
+        #     field=models.DateTimeField(default=datetime.now(pytz.utc), verbose_name='date published'),
+        # ),
     ]

@@ -14,14 +14,14 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.CreateModel(
-            name='PaintingMutation',
-            fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('prompt', models.CharField(max_length=600)),
-                ('request_date', models.DateTimeField(default=datetime.now(pytz.utc), verbose_name='date published')),
-            ],
-        ),
+        # migrations.CreateModel(
+        #     name='PaintingMutation',
+        #     fields=[
+        #         ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+        #         ('prompt', models.CharField(max_length=600)),
+        #         ('request_date', models.DateTimeField(default=datetime.now(pytz.utc), verbose_name='date published')),
+        #     ],
+        # ),
         migrations.AddField(
             model_name='painting',
             name='created_at',
@@ -30,14 +30,20 @@ class Migration(migrations.Migration):
         ),
         migrations.AddField(
             model_name='painting',
-            name='name',
+            name='title',
             field=models.CharField(default="Untitled", max_length=280),
             preserve_default=False,
         ),
         migrations.AddField(
             model_name='painting',
-            name='mutation',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='paintingMuse.paintingmutation'),
+            name='prompt',
+            field=models.CharField(default="", max_length=700),
             preserve_default=False,
         ),
+        # migrations.AddField(
+        #     model_name='painting',
+        #     name='mutation',
+        #     field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='paintingMuse.paintingmutation'),
+        #     preserve_default=False,
+        # ),
     ]
